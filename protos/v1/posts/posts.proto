@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package v1.posts;
+
+option go_package = "go-grpc-playground/protos/v1/posts";
+
+
+service Post {
+  rpc ListPost(ListPostRequest) returns (ListPostResponse);
+  rpc ListPostByUserId(ListPostByUserIdRequest) returns (ListPostByUserIdResponse);
+
+}
+
+message PostMessage {
+  string post_id = 1;
+  string author = 2;
+  string title = 3;
+  string body = 4;
+  repeated string tags = 5;
+}
+
+message ListPostRequest{
+}
+
+message ListPostResponse{
+  repeated PostMessage posts = 1;
+}
+
+message ListPostByUserIdRequest{
+  string user_id = 1;
+}
+
+
+message ListPostByUserIdResponse{
+  repeated PostMessage posts = 1;
+}
+
