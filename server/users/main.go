@@ -2,17 +2,28 @@ package main
 
 import (
 	"context"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"go-grpc-playground/data"
 	userpb "go-grpc-playground/protos/v2/users"
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"time"
 )
 
 const port = "8001"
 
 type userServer struct {
 	userpb.UserServer
+}
+
+func customMiddleware() grpc.UnaryServerInterceptor {
+	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+		log.Printf("Requested at:", time.Now())
+
+		res, err := handler(ctx, req)
+		return res, err
+	}
 }
 
 func main() {
@@ -22,7 +33,13 @@ func main() {
 		log.Fatalf("failed to net listen : %v", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(
+			grpc_middleware.ChainUnaryServer(
+				customMiddleware(),
+			)),
+	)
+
 	userpb.RegisterUserServer(grpcServer, &userServer{})
 
 	log.Printf("start gRPC server on %s port", port)
