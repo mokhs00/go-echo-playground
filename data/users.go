@@ -1,6 +1,6 @@
 package data
 
-import userpb "go-grpc-playground/protos/v1/users"
+import userpb "go-grpc-playground/protos/v2/users"
 
 var Users = []*userpb.UserInfo{
 	{

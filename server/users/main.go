@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"go-grpc-playground/data"
-	userpb "go-grpc-playground/protos/v1/users"
+	userpb "go-grpc-playground/protos/v2/users"
 	"google.golang.org/grpc"
 	"log"
 	"net"
